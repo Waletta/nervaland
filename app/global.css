@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 40s linear infinite;
+}

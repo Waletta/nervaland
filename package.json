@@ -1,0 +1,35 @@
+{
+  "name": "nervaland",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "eslint --fix"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.2",
+    "@types/react": "19.3.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.5",
+    "prettier": "^3.9.8",
+    "prettier-eslint": "^16.4.2",
+    "typescript": "^5.9.3"
+  },
+  "allowScripts": {
+    "unrs-resolver@1.12.2": true
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "axios": "^1.20.0",
+    "next": "^16.3.5",
+    "postcss": "^8.5.28",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "zustand": "^5.0.15"
+  }
+}
