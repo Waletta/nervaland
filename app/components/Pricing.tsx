@@ -1,4 +1,8 @@
 // app/components/Pricing.tsx
+
+import SwapArrow from "./SwapArrow";
+
+
 const plans = [
   {
     name: "Free",
@@ -47,11 +51,10 @@ export default function Pricing() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`rounded-2xl border p-8 ${
-                plan.highlighted
+              className={`rounded-2xl border p-8 ${plan.highlighted
                   ? "border-white/30 bg-white/6"
                   : "border-white/10 bg-white/2"
-              }`}
+                }`}
             >
               <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
               <div className="mt-4 flex items-baseline gap-1">
@@ -70,13 +73,13 @@ export default function Pricing() {
                 ))}
               </ul>
               <button
-                className={`mt-8 w-full rounded-full px-6 py-3 text-sm font-semibold transition ${
-                  plan.highlighted
+                className={`group mt-8 w-full inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition ${plan.highlighted
                     ? "bg-white text-black hover:bg-white/90"
                     : "border border-white/20 text-white hover:bg-white/10"
-                }`}
+                  }`}
               >
                 {plan.cta}
+                <SwapArrow />
               </button>
             </div>
           ))}

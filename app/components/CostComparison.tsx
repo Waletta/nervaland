@@ -4,9 +4,6 @@ export default function CostComparison() {
     <section className="w-full bg-black border-t border-white/10">
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs sm:text-sm font-semibold text-white/50 uppercase tracking-[0.2em] mb-6">
-            The subscription trap
-          </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
             Stop paying for subscriptions you&apos;ll never use
           </h2>

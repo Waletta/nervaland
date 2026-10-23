@@ -1,8 +1,10 @@
 "use client";
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-export type NavigationTab = 'Docs' | 'Login' | 'Signup';
+
+export type NavigationTab = 'Docs' | 'Login' | 'Get Started';
 
 interface TopbarProps {
   activeTab?: NavigationTab;
@@ -13,14 +15,14 @@ interface TopbarProps {
 const TAB_ROUTES: Record<NavigationTab, string> = {
   'Docs': '/docs',
   'Login': '/login',
-  'Signup': '/',
+  'Get Started': '/get-started',
 };
 
 // Route → onglet (pour dériver l'onglet actif depuis l'URL)
 const ROUTE_TO_TAB: { path: string; tab: NavigationTab }[] = [
   { path: '/docs', tab: 'Docs' },
   { path: '/login', tab: 'Login' },
-  { path: '/signup', tab: 'Signup' },
+  { path: '/get-started', tab: 'Get Started' },
 ];
 
 export const Topbar: React.FC<TopbarProps> = ({
@@ -35,7 +37,7 @@ export const Topbar: React.FC<TopbarProps> = ({
   const navLinks: NavigationTab[] = [
     'Docs',
     'Login',
-    'Signup',
+    'Get Started',
   ];
 
   const derivedTab: NavigationTab | undefined = ROUTE_TO_TAB.find(
@@ -55,21 +57,32 @@ export const Topbar: React.FC<TopbarProps> = ({
   };
 
   return (
-    <header className="w-full sticky top-0 z-40 border-b border-gray-100/10">
+    <header className="w-full z-40 border-b border-gray-100/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
         <div
           className="flex items-center gap-3 cursor-pointer group"
           onClick={() => handleNavClick('Docs')}
         >
+          <Image
+            src="/logo-icon.png"
+            alt="Nerva"
+            width={220}
+            height={32}
+            priority
+            onClick={(e) => {
+              e.stopPropagation();
+              handleHomeClick();
+            }}
+            className="hidden sm:block h-8 w-auto cursor-pointer opacity-90 hover:opacity-100 transition-opacity"
+          />
 
           <span
             onClick={(e) => {
-              e.stopPropagation();  const currentTab = derivedTab ?? activeTab;
-
+              e.stopPropagation();
               handleHomeClick();
             }}
-            className="tracking-[1.05em] text-base font-bold text-white uppercase hidden sm:inline-block"
+            className="tracking-[0.2em] text-sm font-medium text-white/90 hidden sm:inline-block cursor-pointer"
           >
             NERVA
           </span>

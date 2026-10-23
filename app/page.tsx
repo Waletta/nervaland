@@ -1,5 +1,4 @@
 import CostComparison from './components/CostComparison';
-import CTA from './components/CTA';
 import FAQ from './components/FAQ';
 import Features from './components/Features';
 import Hero from './components/Hero';
@@ -10,12 +9,11 @@ export default function Home() {
   return (
     <main className="bg-black">
       <Hero />
+      <CostComparison />
       <Features />
       <HowItWorks />
-      <CostComparison />
       <Pricing />
       <FAQ />
-      <CTA />
     </main>
   );
 }
