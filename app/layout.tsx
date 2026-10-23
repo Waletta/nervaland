@@ -7,8 +7,8 @@ import Footer from './components/Footer';
 import Topbar from './components/Topbar';
 
 const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
+    subsets: ["latin"],
+    variable: "--font-geist-mono",
 });
 
 
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
         siteName: "Nerva",
         title: "Nerva — One app for every LLM, voice, and avatar",
         description:
-            "Chat with any LLM, generate voice with ElevenLabs, create AI avatars with HeyGen, and orchestrate skills, souls, human managers, and workflows—from the web or inside VS Code.",
+            "Chat with any LLM, generate voice with ElevenLabs, create AI avatars with HeyGen, and orchestrate skills, souls, algorithmic humans, and workflows—from the web or inside VS Code.",
         images: [
             {
                 url: "/og-image.png",
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
         card: "summary_large_image",
         title: "Nerva — One app for every LLM, voice, and avatar",
         description:
-            "Chat with any LLM, generate voice with ElevenLabs, create AI avatars with HeyGen, and orchestrate skills, souls, human managers, and workflows.",
+            "Chat with any LLM, generate voice with ElevenLabs, create AI avatars with HeyGen, and orchestrate skills, souls, algorithmic humans, and workflows.",
         images: ["/og-image.png"],
     },
 
@@ -102,13 +102,12 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <><head>
-        </head><html lang="en" className="scroll-smooth">
+        <html lang="en" className="scroll-smooth">
             <body className={`${geistMono.className} bg-black text-white antialiased`}>
-                    <Topbar />
-                    {children}
-                    <Footer />
-                </body>
-            </html></>
+                <Topbar />
+                {children}
+                <Footer />
+            </body>
+        </html>
     );
 }

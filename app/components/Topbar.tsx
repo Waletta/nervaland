@@ -2,7 +2,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-export type NavigationTab = 'GET A DEMO' | 'LOGIN' | 'SIGNUP';
+export type NavigationTab = 'Docs' | 'Login' | 'Signup';
 
 interface TopbarProps {
   activeTab?: NavigationTab;
@@ -11,16 +11,16 @@ interface TopbarProps {
 }
 
 const TAB_ROUTES: Record<NavigationTab, string> = {
-  'GET A DEMO': '/demo',
-  'LOGIN': '/login',
-  'SIGNUP': '/',
+  'Docs': '/docs',
+  'Login': '/login',
+  'Signup': '/',
 };
 
 // Route → onglet (pour dériver l'onglet actif depuis l'URL)
 const ROUTE_TO_TAB: { path: string; tab: NavigationTab }[] = [
-  { path: '/cars', tab: 'GET A DEMO' },
-  { path: '/login', tab: 'LOGIN' },
-  { path: '/signup', tab: 'SIGNUP' },
+  { path: '/docs', tab: 'Docs' },
+  { path: '/login', tab: 'Login' },
+  { path: '/signup', tab: 'Signup' },
 ];
 
 export const Topbar: React.FC<TopbarProps> = ({
@@ -33,9 +33,9 @@ export const Topbar: React.FC<TopbarProps> = ({
   const pathname = usePathname();
 
   const navLinks: NavigationTab[] = [
-    'GET A DEMO',
-    'LOGIN',
-    'SIGNUP',
+    'Docs',
+    'Login',
+    'Signup',
   ];
 
   const derivedTab: NavigationTab | undefined = ROUTE_TO_TAB.find(
@@ -55,12 +55,12 @@ export const Topbar: React.FC<TopbarProps> = ({
   };
 
   return (
-    <header className="w-full bg-linear-to-b from-black/90 via-[#121212]/90 to-[#1a1a1a]/90 sticky top-0 z-40">
+    <header className="w-full sticky top-0 z-40 border-b border-gray-100/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
         <div
           className="flex items-center gap-3 cursor-pointer group"
-          onClick={() => handleNavClick('GET A DEMO')}
+          onClick={() => handleNavClick('Docs')}
         >
 
           <span
@@ -82,7 +82,7 @@ export const Topbar: React.FC<TopbarProps> = ({
               <button
                 key={link}
                 onClick={() => handleNavClick(link)}
-                className={`text-xsPRESTIGE CARS tracking-[0.2em] font-medium transition-all duration-200 py-1 relative border-b-2 ${isActive
+                className={`text-xs tracking-[0.2em] font-medium transition-all duration-200 py-1 relative border-b-2 ${isActive
                   ? 'text-[#c5a059] border-[#c5a059]'
                   : 'text-gray-400 border-transparent hover:text-white'
                   }`}
