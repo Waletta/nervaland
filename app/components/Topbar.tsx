@@ -67,8 +67,8 @@ export const Topbar: React.FC<TopbarProps> = ({
           <Image
             src="/logo-icon.png"
             alt="Nerva"
-            width={220}
-            height={32}
+            width={383}
+            height={328}
             priority
             onClick={(e) => {
               e.stopPropagation();

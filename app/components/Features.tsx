@@ -1,13 +1,13 @@
 const features = [
   { title: "Multi-model chat", description: "Talk to GPT, Claude, Gemini, Grok, Qwen and more from a single interface. Compare answers side by side." },
+  { title: "Privacy mode - SNC data", description: "Pasting an email or doc into AI sends every name, phone, and address with it. Privacy mode auto-hides them first — the AI answers, your data stays yours." },
   { title: "Real-time web access", description: "Search the live web for news, prices, and events — get up-to-the-minute answers that models alone can't provide." },
   { title: "Algorithmic human", description: "Turn any text into a talking avatar in one click — use your own face and voice, or pick from a library of avatars and voices in every language." },
-  { title: "Image generation", description: "Create images from text prompts with the best models available." },
+  { title: "Image & video generation", description: "Create images and videos from text prompts with the best models available — and turn video back into text." },
   { title: "Voice & speech", description: "Generate natural voice, or transcribe speech to text in seconds." },
-  { title: "Video generation", description: "Turn text into video and video into text with built-in tools." },
-  { title: "Skills, souls & workflows", description: "Orchestrate reusable skills, souls, algorithmic humans, and automated workflows." },
+  { title: "Skills, workflows & souls", description: "Orchestrate reusable skills, automated workflows and souls." },
   { title: "Manager mode", description: "Schedule tasks, triage your inbox, prioritize what matters, and get instant summaries of long threads and documents." },
-  { title: "Code copilot", description: "Write, debug, and explain code in any language. From quick scripts to full features." },
+  { title: "Code copilot", description: "Write, debug, review and explain code. From quick scripts to full features, talk with your code in natural language." },
 ];
 
 export default function Features() {

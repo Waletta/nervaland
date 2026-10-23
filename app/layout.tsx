@@ -16,12 +16,12 @@ export const metadata: Metadata = {
     metadataBase: new URL("https://www.nerva.live"),
 
     title: {
-        default: "Nerva — One app for every LLM",
+        default: "Nerva — One app for All AI",
         template: "%s | Nerva",
     },
 
     description:
-        "Nerva gives you AI chat, images, voice, avatars, and video in one smooth workspace. No API keys, no providers to learn—just create. And unlike most AI apps, Nerva lets you adjust model settings like temperature, top-p, and top-k when you want deeper control. Also available inside VS Code.",
+        "Nerva gives you AI chat, images, voice, avatars, and video in one smooth workspace. No multiples API keys, no providers to learn—just create. And unlike most AI apps, Nerva lets you adjust model settings like temperature, top-p, and top-k when you want deeper control. Also available inside VS Code.",
 
     keywords: [
         "AI workspace for non-technical users",
@@ -45,7 +45,10 @@ export const metadata: Metadata = {
         "AI human manager",
         "AI workflow manager",
         "AI workflow automation",
-        "VS Code AI extension",
+        "VS Code AI extension, integration",
+        "Connect Github Copilot",
+        "Connect Gitlab Copilot",
+        "Connect GitKraken Copilot",
         "pay as-you-go AI app",
         "Nerva",
     ],
@@ -70,14 +73,13 @@ export const metadata: Metadata = {
                 url: "/og-image.png",
                 width: 1200,
                 height: 630,
-                alt: "Nerva — one app for every LLM, voice, and avatar",
             },
         ],
     },
 
     twitter: {
         card: "summary_large_image",
-        title: "Nerva — One app for every LLM, voice, and avatar",
+        title: "Nerva — One app for 500+ LLM, voice, speech, and workflow models",
         description:
             "Chat with any LLM, generate voice with ElevenLabs, create AI avatars with HeyGen, and orchestrate skills, souls, algorithmic humans, and workflows.",
         images: ["/og-image.png"],
