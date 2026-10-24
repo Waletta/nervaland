@@ -14,17 +14,12 @@ declare global {
             auto_select?: boolean;
             cancel_on_tap_outside?: boolean;
           }) => void;
-          prompt: (callback?: (notification: {
-            isNotDisplayed: () => boolean;
-            isSkippedMoment: () => boolean;
-            getNotDisplayedReason: () => string;
-          }) => void) => void;
+          prompt: () => void; // Simplified prompt signature for FedCM
         };
       };
     };
   }
 }
-
 interface GoogleOneTapProps {
   clientId: string;
 }
@@ -69,16 +64,12 @@ export default function GoogleOneTap({ clientId }: GoogleOneTapProps) {
     window.google.accounts.id.initialize({
       client_id: clientId,
       callback: handleCredentialResponse,
-      auto_select: process.env.NODE_ENV === 'production', // Automatically logs in if a single session exists
+      auto_select: false, // Automatically logs in if a single session exists
       cancel_on_tap_outside: true,
     });
 
     // Prompt the One Tap UI
-    window.google.accounts.id.prompt((notification) => {
-      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        console.log('One Tap skipped or blocked:', notification.getNotDisplayedReason());
-      }
-    });
+    window.google.accounts.id.prompt();
   }, [clientId, router]);
 
   return null;
