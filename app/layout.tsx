@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Geist_Mono } from "next/font/google";
 import "./global.css";
 
+import Script from 'next/dist/client/script';
 import Footer from './components/Footer';
 import Topbar from './components/Topbar';
 
@@ -109,6 +110,7 @@ export default function RootLayout({
                 <Topbar />
                 {children}
                 <Footer />
+                <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
             </body>
         </html>
     );

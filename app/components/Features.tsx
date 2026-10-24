@@ -24,8 +24,8 @@ export default function Features() {
         </div>
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
-            <div key={feature.title} className="rounded-2xl border border-white/10 bg-white/2 p-6 hover:bg-white/4 transition">
-              <h3 className="text-lg font-semibold text-white">{feature.title}</h3>
+            <div key={feature.title} className="group rounded-2xl border border-white/10 bg-white/2 p-6 hover:border-white/30 hover:bg-white/6 transition">
+              <h3 className="text-lg font-semibold text-white transition group-hover:text-lime-400">{feature.title}</h3>
               <p className="mt-2 text-sm text-white/60 leading-relaxed">{feature.description}</p>
             </div>
           ))}
