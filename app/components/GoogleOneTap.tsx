@@ -3,23 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
-declare global {
-  interface Window {
-    google?: {
-      accounts: {
-        id: {
-          initialize: (options: {
-            client_id: string;
-            callback: (response: { credential: string }) => void | Promise<void>;
-            auto_select?: boolean;
-            cancel_on_tap_outside?: boolean;
-          }) => void;
-          prompt: () => void; // Simplified prompt signature for FedCM
-        };
-      };
-    };
-  }
-}
 interface GoogleOneTapProps {
   clientId: string;
 }

@@ -96,7 +96,7 @@ export const Topbar: React.FC<TopbarProps> = ({
                 key={link}
                 onClick={() => handleNavClick(link)}
                 className={`text-xs tracking-[0.2em] font-medium transition-all duration-200 py-1 relative border-b-2 ${isActive
-                  ? 'text-[#c5a059] border-[#c5a059]'
+                  ? 'text-lime-400 border-lime-400'
                   : 'text-gray-400 border-transparent hover:text-white'
                   }`}
               >
@@ -132,7 +132,7 @@ export const Topbar: React.FC<TopbarProps> = ({
                 key={link}
                 onClick={() => handleNavClick(link)}
                 className={`text-left text-xs tracking-[0.2em] py-2.5 px-3 rounded transition-all ${isActive
-                  ? 'text-[#c5a059] bg-[#222222] font-semibold border-l-2 border-[#c5a059]'
+                  ? 'text-lime-400 bg-[#222222] font-semibold border-l-2 border-lime-400'
                   : 'text-gray-400 hover:text-white hover:bg-[#1a1a1a]'
                   }`}
               >
