@@ -8,7 +8,7 @@ export default function CostComparison() {
             Stop paying for subscriptions you&apos;ll never use
           </h2>
           <p className="mt-6 text-base sm:text-lg text-white/60 leading-relaxed">
-            Our research shows the average user spends{" "}
+            Research shows the average user spends{" "}
             <span className="text-white font-semibold">less than $3/month</span> on AI when
             most people pay{" "}
             <span className="text-white font-semibold">$10–$20/month</span> for subscriptions
