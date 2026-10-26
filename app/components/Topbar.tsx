@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 
-export type NavigationTab = 'Docs' | 'Login' | 'Get Started';
+export type NavigationTab = 'Documents' | 'Login' | 'Get Started';
 
 interface TopbarProps {
   activeTab?: NavigationTab;
@@ -13,14 +13,14 @@ interface TopbarProps {
 }
 
 const TAB_ROUTES: Record<NavigationTab, string> = {
-  'Docs': '/docs',
+  'Documents': '/docs',
   'Login': '/login',
   'Get Started': '/get-started',
 };
 
 // Route → onglet (pour dériver l'onglet actif depuis l'URL)
 const ROUTE_TO_TAB: { path: string; tab: NavigationTab }[] = [
-  { path: '/docs', tab: 'Docs' },
+  { path: '/docs', tab: 'Documents' },
   { path: '/login', tab: 'Login' },
   { path: '/get-started', tab: 'Get Started' },
 ];
@@ -35,7 +35,7 @@ export const Topbar: React.FC<TopbarProps> = ({
   const pathname = usePathname();
 
   const navLinks: NavigationTab[] = [
-    'Docs',
+    'Documents',
     'Login',
     'Get Started',
   ];
@@ -62,7 +62,7 @@ export const Topbar: React.FC<TopbarProps> = ({
 
         <div
           className="flex items-center gap-3 cursor-pointer group"
-          onClick={() => handleNavClick('Docs')}
+          onClick={() => handleNavClick('Documents')}
         >
           <Image
             src="/logo-icon.png"
