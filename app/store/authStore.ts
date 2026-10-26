@@ -40,6 +40,7 @@ interface AuthActions {
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
 
+
 const initialState: AuthState = {
   accessToken: null,
   pendingEmail: null,
