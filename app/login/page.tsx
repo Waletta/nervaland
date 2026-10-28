@@ -2,7 +2,7 @@
 
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import GoogleIcon from '../components/icons/GoogleIcon';
 import { useAuthStore } from '../store/authStore';
 
@@ -10,8 +10,12 @@ function LoginPageContent() {
   const router = useRouter();
 
   const { captureOAuthResult, login, isLoading, error } = useAuthStore();
+  const hasCapturedRef = useRef(false);
 
   useEffect(() => {
+    if (hasCapturedRef.current) return;
+    hasCapturedRef.current = true;
+    
     captureOAuthResult().then(() => {
       const state = useAuthStore.getState();
       if (state.accessToken) {
@@ -19,7 +23,6 @@ function LoginPageContent() {
       }
     });
   }, [captureOAuthResult, router]);
-
 
   return (
     <div className="min-h-screen bg-background">
