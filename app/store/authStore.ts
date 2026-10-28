@@ -141,7 +141,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
         login: () => {
           if (typeof window !== 'undefined') {
-            window.location.href = 'http://localhost:8000/auth/login/google';
+            window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + '/auth/login/google';
           }
         },
       };
