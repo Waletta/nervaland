@@ -7,49 +7,37 @@ import { extractErrorMessage } from '../utils/format';
 export interface User {
   id: string;
   email: string;
-  fullname?: string;
-  status: string;
-  is_active: boolean;
-  is_verified: boolean;
+  fullname: string | null;
 }
-
-export type VerificationType = 'SIGN_UP' | 'PASSWORD_RESET';
 
 interface AuthState {
   accessToken: string | null;
   isInitialized: boolean;
   isCheckingAuth: boolean;
-  pendingEmail: string | null;
   user: User | null;
   isLoading: boolean;
   error: string | null;
 }
 
 interface AuthActions {
-  signup: (email: string) => Promise<void>;
-  verifyOtp: (email: string, code: string, verification_type: VerificationType) => Promise<void>;
-  resendCode: () => Promise<void>;
-  register: (email: string, fullname: string, password: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+  login: () => Promise<void>;
+  captureOAuthResult: () => Promise<void>;    // CHANGE 3: NEW — handles the redirect back
   logout: () => Promise<void>;
-  lostpassword: (email: string) => Promise<void>;
-  resetpassword: (pass: string) => Promise<void>;
   checkAuth: () => Promise<void>;
   clearAuth: () => void;
 }
 
-const normalizeEmail = (email: string) => email.trim().toLowerCase();
-
-
 const initialState: AuthState = {
   accessToken: null,
-  pendingEmail: null,
   user: null,
   isLoading: false,
   error: null,
   isInitialized: false,
   isCheckingAuth: false,
 };
+
+const STORAGE_KEY = 'nerva-auth-storage';
+
 
 export const useAuthStore = create<AuthState & AuthActions>()(
   persist(
@@ -82,43 +70,72 @@ export const useAuthStore = create<AuthState & AuthActions>()(
           if (typeof window !== 'undefined') localStorage.removeItem('nerva-auth-storage');
         },
 
+
+        captureOAuthResult: async () => {
+          if (typeof window === 'undefined') return;
+
+          const params = new URLSearchParams(window.location.search);
+          const token_temp_auth = params.get('token_temp_auth');
+          const error = params.get('error');
+          
+          if (!token_temp_auth && !error) return;
+
+          window.history.replaceState({}, '', window.location.pathname);
+
+          if (error) {
+            set({ error: `Google login failed: ${error}`, isInitialized: true });
+            return;
+          }
+
+          try {
+            set({ isLoading: true, error: null });
+            const token_temp_auth = params.get('token_temp_auth');
+            if (token_temp_auth) {
+              const { data } = await apiaxios.post<{ access_token: string }>(
+                '/auth/exchange',
+                { token_temp_auth }
+              );
+            
+              set({ accessToken: data.access_token });
+              await get().checkAuth();
+            }
+          } catch (error: unknown) {
+            set({
+              accessToken: null,
+              user: null,
+              error: extractErrorMessage(error, 'Login failed. Please try again.'),
+              isInitialized: true,
+              isCheckingAuth: false,
+            });
+          } finally {
+            set({ isLoading: false });
+          }
+        },
+
+        logout: async (): Promise<void> => {
+          get().clearAuth();
+        },
+
     
         checkAuth: async (): Promise<void> => {
           const { accessToken } = get();
 
           if (!accessToken) {
-            set({
-              user: null,
-              isInitialized: true,
-              isCheckingAuth: false,
-              error: null,
-            });
+            set({ user: null, isInitialized: true, isCheckingAuth: false, error: null });
             return;
           }
 
-          set({
-            isCheckingAuth: true,
-            error: null,
-          });
+          set({ isCheckingAuth: true, error: null });
 
           try {
-            const { data } = await apiaxios.get('/auth/me', authHeader());
-            const user = data.user ?? data;
+            const { data } = await apiaxios.get<User>('/auth/me', authHeader());
+            set({ user: data, error: null, isInitialized: true, isCheckingAuth: false });
 
-            set({
-              user,
-              error: null,
-              isInitialized: true,
-              isCheckingAuth: false,
-            });
           } catch (error: any) {
             const status = error.response?.status;
 
-            if (status === 401 || status === 403) {
-              set({
-                isInitialized: true,
-                isCheckingAuth: false,
-              });
+            if (status === 401 || status === 403 || status === 404) {
+              get().clearAuth();
               return;
             }
 
@@ -130,71 +147,23 @@ export const useAuthStore = create<AuthState & AuthActions>()(
           }
         },
 
-        signup: (email) =>
-          run(async () => {
-            const ne = normalizeEmail(email);
-            const { data } = await apiaxios.post('/auth/signup', { email: ne });
-            set({ user: data.user ?? null, pendingEmail: ne, error: null });
-          }, 'Signup failed'),
 
-        resendCode: () =>
+        login: () =>
           run(async () => {
-            const { pendingEmail } = get();
-            if (!pendingEmail) throw new Error('Missing email. Please restart signup.');
-            await apiaxios.post('/auth/resend-code', { email: pendingEmail });
-          }, 'Failed to resend code', true),
-
-        verifyOtp: (email, code, verification_type) =>
-          run(async () => {
-            const ne = normalizeEmail(email);
-            const { data } = await apiaxios.post('/auth/verify-otp', { verification_type, email: ne, code });
-            set({ accessToken: data.access_token, user: data.user, pendingEmail: ne, error: null });
-          }, 'Verification failed', true),
-
-        lostpassword: (email) =>
-          run(async () => {
-            const ne = normalizeEmail(email);
-            await apiaxios.post('/auth/forgot-password', { email: ne });
-            set({ accessToken: null, pendingEmail: ne, error: null });
-          }, 'Failed to send reset code', true),
-
-        resetpassword: (pass) =>
-          run(async () => {
-            const { data } = await apiaxios.post('/auth/reset-password', { new_password: pass }, authHeader());
-            set({ user: data.user, error: null });
-          }, 'Password reset failed', true),
-
-        register: (email, fullname, password) =>
-          run(async () => {
-            const ne = normalizeEmail(email);
-            const { data } = await apiaxios.post('/auth/register',
-              { email: ne,  fullname, password },
-              authHeader()
-            );
-            set({ accessToken: data.access_token, pendingEmail: null, user: data.user, error: null });
-          }, 'Registration failed', true),
-
-        login: (email, password) =>
-          run(async () => {
-            const ne = normalizeEmail(email);
-            const { data } = await apiaxios.post('/auth/login', { email: ne, password });
+            const { data } = await apiaxios.post('/auth/login/google');
             set({
-              accessToken: data.access_token, pendingEmail: null, user: data.user, error: null,
+              accessToken: data.access_token, user: data.user, error: null,
             });
           }, 'Login failed', true),
 
-        logout: async (): Promise<void> => {
-          get().clearAuth();
-        },
       };
     },
     {
-      name: 'nerva-auth-storage',
+      name: STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
-      partialize: ({ accessToken, user, pendingEmail }) => ({
+      partialize: ({ accessToken, user }) => ({
         accessToken,
         user,
-        pendingEmail,
       }),
       onRehydrateStorage: () => (state) => {
         state?.checkAuth?.();

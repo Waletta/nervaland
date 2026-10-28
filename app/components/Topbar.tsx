@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 
-export type NavigationTab = 'Documents' | 'Login' | 'Get Started';
+export type NavigationTab = 'Documents' | 'Get Started';
 
 interface TopbarProps {
   activeTab?: NavigationTab;
@@ -14,15 +14,13 @@ interface TopbarProps {
 
 const TAB_ROUTES: Record<NavigationTab, string> = {
   'Documents': '/docs',
-  'Login': '/login',
   'Get Started': '/get-started',
 };
 
 // Route → onglet (pour dériver l'onglet actif depuis l'URL)
 const ROUTE_TO_TAB: { path: string; tab: NavigationTab }[] = [
   { path: '/docs', tab: 'Documents' },
-  { path: '/login', tab: 'Login' },
-  { path: '/get-started', tab: 'Get Started' },
+  { path: '/login', tab: 'Get Started' },
 ];
 
 export const Topbar: React.FC<TopbarProps> = ({
@@ -36,7 +34,6 @@ export const Topbar: React.FC<TopbarProps> = ({
 
   const navLinks: NavigationTab[] = [
     'Documents',
-    'Login',
     'Get Started',
   ];
 
