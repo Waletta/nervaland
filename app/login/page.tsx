@@ -19,7 +19,7 @@ function LoginPageContent() {
     captureOAuthResult().then(() => {
       const state = useAuthStore.getState();
       if (state.accessToken) {
-        router.replace('/');
+        router.replace('/dashboard');
       }
     });
   }, [captureOAuthResult, router]);
