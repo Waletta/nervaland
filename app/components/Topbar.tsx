@@ -14,7 +14,7 @@ interface TopbarProps {
 
 const TAB_ROUTES: Record<NavigationTab, string> = {
   'Documents': '/docs',
-  'Get Started': '/get-started',
+  'Get Started': '/login',
 };
 
 // Route → onglet (pour dériver l'onglet actif depuis l'URL)

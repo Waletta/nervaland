@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { AuthBootstrap } from './components/AuthBootstrap';
 
 import { Geist_Mono } from "next/font/google";
 import "./global.css";
@@ -108,7 +107,6 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${geistMono.className} bg-black text-white antialiased`}>
-                <AuthBootstrap />
                 <Topbar />
                 {children}
                 <Footer />

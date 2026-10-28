@@ -11,5 +11,5 @@ export function AuthBootstrap() {
     captureOAuthResult();
   }, [captureOAuthResult]);
 
-  return null; // renders nothing — pure side effect
+  return null;
 }
