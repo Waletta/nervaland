@@ -251,7 +251,7 @@ export default function DashboardPage() {
         </div>
 
         <p className="mt-4 text-xs text-zinc-400 text-center">
-          Showing {filtered.length} of {DUMMY_REQUESTS.length} requests · dummy data
+          Showing {filtered.length} of {DUMMY_REQUESTS.length} requests
         </p>
       </main>
     </div>

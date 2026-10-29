@@ -1,10 +1,10 @@
 "use client";
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuthStore } from '../store/authStore';
 
-
-export type NavigationTab = 'Documents' | 'Get Started';
+export type NavigationTab = 'Documents' | 'Get Started' | 'Dashboard';
 
 interface TopbarProps {
   activeTab?: NavigationTab;
@@ -15,12 +15,13 @@ interface TopbarProps {
 const TAB_ROUTES: Record<NavigationTab, string> = {
   'Documents': '/docs',
   'Get Started': '/login',
+  'Dashboard': '/dashboard',
 };
 
-// Route → onglet (pour dériver l'onglet actif depuis l'URL)
 const ROUTE_TO_TAB: { path: string; tab: NavigationTab }[] = [
   { path: '/docs', tab: 'Documents' },
   { path: '/login', tab: 'Get Started' },
+  { path: '/dashboard', tab: 'Dashboard' },
 ];
 
 export const Topbar: React.FC<TopbarProps> = ({
@@ -29,13 +30,28 @@ export const Topbar: React.FC<TopbarProps> = ({
   onReserveClick,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [hydrated, setHydrated] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  const navLinks: NavigationTab[] = [
-    'Documents',
-    'Get Started',
-  ];
+  // `user` is only set after checkAuth() validates the token against /auth/me
+  const user = useAuthStore((s) => s.user);
+
+  // Wait for zustand persist to rehydrate from localStorage
+  useEffect(() => {
+    if (useAuthStore.persist.hasHydrated()) {
+      setHydrated(true);
+      return;
+    }
+    const unsub = useAuthStore.persist.onFinishHydration(() => setHydrated(true));
+    return unsub;
+  }, []);
+
+  const isLoggedIn = hydrated && !!user;
+
+  const navLinks: NavigationTab[] = isLoggedIn
+    ? ['Documents', 'Dashboard']
+    : ['Documents', 'Get Started'];
 
   const derivedTab: NavigationTab | undefined = ROUTE_TO_TAB.find(
     ({ path }) => pathname === path || pathname.startsWith(`${path}/`)
@@ -56,7 +72,6 @@ export const Topbar: React.FC<TopbarProps> = ({
   return (
     <header className="w-full z-40 border-b border-gray-100/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-
         <div
           className="flex items-center gap-3 cursor-pointer group"
           onClick={() => handleNavClick('Documents')}
@@ -73,7 +88,6 @@ export const Topbar: React.FC<TopbarProps> = ({
             }}
             className="hidden sm:block h-8 w-auto cursor-pointer opacity-90 hover:opacity-100 transition-opacity"
           />
-
           <span
             onClick={(e) => {
               e.stopPropagation();
@@ -86,21 +100,23 @@ export const Topbar: React.FC<TopbarProps> = ({
         </div>
 
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => {
-            const isActive = currentTab === link;
-            return (
-              <button
-                key={link}
-                onClick={() => handleNavClick(link)}
-                className={`text-xs tracking-[0.2em] font-medium transition-all duration-200 py-1 relative border-b-2 ${isActive
-                  ? 'text-lime-400 border-lime-400'
-                  : 'text-gray-400 border-transparent hover:text-white'
+          {hydrated &&
+            navLinks.map((link) => {
+              const isActive = currentTab === link;
+              return (
+                <button
+                  key={link}
+                  onClick={() => handleNavClick(link)}
+                  className={`text-xs tracking-[0.2em] font-medium transition-all duration-200 py-1 relative border-b-2 ${
+                    isActive
+                      ? 'text-lime-400 border-lime-400'
+                      : 'text-gray-400 border-transparent hover:text-white'
                   }`}
-              >
-                {link}
-              </button>
-            );
-          })}
+                >
+                  {link}
+                </button>
+              );
+            })}
         </nav>
 
         <button
@@ -122,21 +138,23 @@ export const Topbar: React.FC<TopbarProps> = ({
 
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#161616] border-t border-[#222222] px-6 py-4 flex flex-col gap-2">
-          {navLinks.map((link) => {
-            const isActive = currentTab === link;
-            return (
-              <button
-                key={link}
-                onClick={() => handleNavClick(link)}
-                className={`text-left text-xs tracking-[0.2em] py-2.5 px-3 rounded transition-all ${isActive
-                  ? 'text-lime-400 bg-[#222222] font-semibold border-l-2 border-lime-400'
-                  : 'text-gray-400 hover:text-white hover:bg-[#1a1a1a]'
+          {hydrated &&
+            navLinks.map((link) => {
+              const isActive = currentTab === link;
+              return (
+                <button
+                  key={link}
+                  onClick={() => handleNavClick(link)}
+                  className={`text-left text-xs tracking-[0.2em] py-2.5 px-3 rounded transition-all ${
+                    isActive
+                      ? 'text-lime-400 bg-[#222222] font-semibold border-l-2 border-lime-400'
+                      : 'text-gray-400 hover:text-white hover:bg-[#1a1a1a]'
                   }`}
-              >
-                {link}
-              </button>
-            );
-          })}
+                >
+                  {link}
+                </button>
+              );
+            })}
         </div>
       )}
     </header>

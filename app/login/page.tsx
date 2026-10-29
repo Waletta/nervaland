@@ -2,27 +2,47 @@
 
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import GoogleIcon from '../components/icons/GoogleIcon';
 import { useAuthStore } from '../store/authStore';
 
 function LoginPageContent() {
   const router = useRouter();
-
-  const { captureOAuthResult, login, isLoading, error } = useAuthStore();
+  const { captureOAuthResult, login, isLoading, error, accessToken } = useAuthStore();
+  const [hydrated, setHydrated] = useState(false);
+  const [capturing, setCapturing] = useState(true);
   const hasCapturedRef = useRef(false);
 
+
   useEffect(() => {
-    if (hasCapturedRef.current) return;
+    if (useAuthStore.persist.hasHydrated()) {
+      setHydrated(true);
+      return;
+    }
+    const unsub = useAuthStore.persist.onFinishHydration(() => setHydrated(true));
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated || hasCapturedRef.current) return;
     hasCapturedRef.current = true;
-    
-    captureOAuthResult().then(() => {
-      const state = useAuthStore.getState();
-      if (state.accessToken) {
-        router.replace('/dashboard');
-      }
-    });
-  }, [captureOAuthResult, router]);
+
+    captureOAuthResult().finally(() => setCapturing(false));
+  }, [hydrated, captureOAuthResult]);
+
+
+  useEffect(() => {
+    if (accessToken) router.replace('/dashboard');
+  }, [accessToken, router]);
+
+
+  if (!hydrated || capturing || accessToken) {
+    return (
+      <div className="flex justify-center pt-24 min-h-screen items-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
